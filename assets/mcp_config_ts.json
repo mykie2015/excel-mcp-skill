@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "excel-typescript": {
+      "command": "node",
+      "args": [
+        "/path/to/excel-mcp-server/dist/index.js"
+      ],
+      "env": {
+        "EXCEL_MCP_WORKBOOK_ROOT": "/workspace",
+        "EXCEL_MCP_LOG_LEVEL": "info"
+      }
+    }
+  }
+}

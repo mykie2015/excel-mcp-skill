@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "excel-python": {
+      "command": "python",
+      "args": [
+        "-m",
+        "excel_mcp_server"
+      ],
+      "env": {
+        "EXCEL_MCP_WORKBOOK_ROOT": "/workspace",
+        "EXCEL_MCP_LOG_LEVEL": "info"
+      }
+    }
+  }
+}
