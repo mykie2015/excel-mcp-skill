@@ -1,0 +1,148 @@
+{
+  "expectations": [
+    {
+      "text": "SKILL.md has valid frontmatter with name, description, and trigger phrases",
+      "passed": true,
+      "evidence": "quick_validate.py returns 'Skill is valid!'. Description includes 6 trigger phrases: 'run a ralph loop', 'run ralph against this repo', 'set up autonomous coding workers', 'ralph wiggum loop', 'PRD to PR with parallel workers', 'autonomous multi-worker build from PRD'."
+    },
+    {
+      "text": "SKILL.md follows progressive disclosure: frontmatter → body → linked files",
+      "passed": true,
+      "evidence": "Frontmatter is 3 lines with description. Body has full instructions. Linked files in references/, assets/, scripts/ are loaded on-demand."
+    },
+    {
+      "text": "Instructions follow a clear sequential step structure",
+      "passed": true,
+      "evidence": "Steps 1-7 flow sequentially: Initialize → Plan → Worker dispatch → Validation gates → Integration → PR + Review → Report. Non-sequential sections (Agent backends, Run management, Configuration) are placed after the steps."
+    },
+    {
+      "text": "The orchestrator correctly chains state in cmd_full",
+      "passed": true,
+      "evidence": "After cmd_init, cmd_full calls _load_state to find the ralph_dir and sets args.run_dir so subsequent commands find it. Lines 927-929 of ralph_orchestrator.py."
+    },
+    {
+      "text": "cmd_review uses correct PR API URLs with actual owner/repo/number values",
+      "passed": true,
+      "evidence": "Uses 'gh pr view --json number,url' and 'gh repo view --json nameWithOwner' to resolve actual values before building the API path. Lines 708-724 of ralph_orchestrator.py."
+    },
+    {
+      "text": "Validation gates run against the correct directory (worktree for per-worker, repo for post-merge)",
+      "passed": true,
+      "evidence": "run_focused_gates() runs against worker worktree path before the pass/fail decision. run_all_gates() runs against repo_dir after merge. Two-level gate architecture in cmd_run."
+    },
+    {
+      "text": "test_focused_cmd from repo_profile is used for per-worker validation",
+      "passed": true,
+      "evidence": "run_focused_gates() uses profile.get('test_focused_cmd', profile.get('test_cmd')) — falls back to test_cmd if focused cmd not configured."
+    },
+    {
+      "text": "Prerequisite tools are checked before running",
+      "passed": true,
+      "evidence": "check_prerequisites() verifies git, gh, python3, and agent-specific tools (codex+docker or opencode). Called at the start of cmd_init."
+    },
+    {
+      "text": "Worker worktrees are cleaned between rounds",
+      "passed": true,
+      "evidence": "reset_worktree() runs git checkout, reset --hard, and clean -fd. Called for each worker at the start of each round in cmd_run."
+    },
+    {
+      "text": "RUN_RESULT.md report includes per-task breakdown, key step durations, validation summary, and retrospective notes",
+      "passed": true,
+      "evidence": "cmd_report generates all template sections: Task Breakdown table, Key Step Durations with percentages, Validation Summary from gate events, Retrospective Notes (longest task, most retried, conflicts, gate failures)."
+    },
+    {
+      "text": "ralph.sh role is accurately documented",
+      "passed": true,
+      "evidence": "SKILL.md Files section describes ralph.sh as 'standalone single-worker loop runner (for manual/debug use; orchestrator manages workers directly)'. ralph.sh header comment confirms it is NOT called by the orchestrator."
+    },
+    {
+      "text": "Cross-agent context is clear — skill can be invoked from any agent",
+      "passed": true,
+      "evidence": "Opening line of SKILL.md body: 'The orchestrator can be invoked from any agent (Cursor, Claude Code, Codex, OpenCode) — it uses Codex Docker or OpenCode agent API as the worker backends.'"
+    }
+  ],
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "total": 12,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "skill_md_lines": 379,
+    "orchestrator_py_lines": 1232,
+    "ralph_sh_lines": 116,
+    "total_files": 8,
+    "evals_created": 2
+  },
+  "claims": [
+    {
+      "claim": "SKILL.md is under 500 lines",
+      "type": "factual",
+      "verified": true,
+      "evidence": "wc -l reports 379 lines"
+    },
+    {
+      "claim": "Python orchestrator compiles without errors",
+      "type": "factual",
+      "verified": true,
+      "evidence": "py_compile.compile() succeeds with no errors"
+    },
+    {
+      "claim": "quick_validate.py passes for the skill",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Exit code 0, output 'Skill is valid!'"
+    }
+  ],
+  "improvements_applied": [
+    {
+      "priority": "critical",
+      "issue": "cmd_full state chaining broken — subsequent commands couldn't find state created by cmd_init",
+      "fix": "After cmd_init, call _load_state to resolve ralph_dir and set args.run_dir"
+    },
+    {
+      "priority": "critical",
+      "issue": "cmd_review PR API URL used literal Python format braces — gh api would 404",
+      "fix": "Resolve actual owner/repo/number via gh pr view and gh repo view before building API path"
+    },
+    {
+      "priority": "critical",
+      "issue": "Validation gates ran against unchanged repo_dir instead of worker worktrees",
+      "fix": "Two-level gate architecture: run_focused_gates per-worker against worktree, run_all_gates post-merge against repo"
+    },
+    {
+      "priority": "high",
+      "issue": "ralph.sh was dead code — orchestrator never called it but SKILL.md claimed it did",
+      "fix": "Clarified ralph.sh as standalone debug runner; updated SKILL.md to accurately describe its role"
+    },
+    {
+      "priority": "high",
+      "issue": "cmd_report output was a fraction of what run_result_template.md specified",
+      "fix": "Added per-task breakdown, key step durations, validation summary, retrospective notes, initiative/agent metadata"
+    },
+    {
+      "priority": "high",
+      "issue": "test_focused_cmd in profile was never used despite being documented",
+      "fix": "run_focused_gates() now uses test_focused_cmd for per-worker validation"
+    },
+    {
+      "priority": "high",
+      "issue": "No checks that git, gh, codex, opencode, docker were installed",
+      "fix": "check_prerequisites() validates required tools on startup"
+    },
+    {
+      "priority": "medium",
+      "issue": "SKILL.md structure had non-step sections breaking the Step 1-7 flow",
+      "fix": "Moved Run management and Agent backends to dedicated sections after Steps; added cross-agent context"
+    },
+    {
+      "priority": "medium",
+      "issue": "Worker worktrees accumulated state from previous rounds",
+      "fix": "reset_worktree() cleans worktrees at the start of each round"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [],
+    "overall": "All critical and high-priority issues have been resolved. The skill is structurally valid, functionally coherent, and the orchestrator code compiles cleanly."
+  }
+}

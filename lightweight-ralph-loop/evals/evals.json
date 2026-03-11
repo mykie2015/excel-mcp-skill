@@ -1,0 +1,61 @@
+{
+  "skill_name": "lightweight-ralph-loop",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Initialize a ralph loop for my Python repo at ./test-repo with PRD.md, 3 workers, using Codex agent",
+      "expected_output": "Orchestrator creates runs/<initiative>/<run-id>/ directory with loop_state.json, workers.json, events.jsonl, and sets up git worktrees",
+      "expectations": [
+        "The skill references ralph_orchestrator.py init command",
+        "The output includes --initiative flag as required",
+        "The output includes --agent codex or defaults to codex",
+        "The output mentions creating git worktrees for worker isolation",
+        "The output mentions creating an integration branch"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Run a full ralph loop from PRD to validated PR for my auth-overhaul initiative",
+      "expected_output": "Orchestrator runs all phases: init, plan, human checkpoint, run, review, report",
+      "expectations": [
+        "The skill references the 'full' subcommand of ralph_orchestrator.py",
+        "The output mentions a human checkpoint before worker dispatch",
+        "The output mentions PR creation via gh",
+        "The output mentions validation gates (test, lint)",
+        "The output mentions RUN_RESULT.md generation"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Show me the status of my current ralph loop run",
+      "expected_output": "Orchestrator shows run status with worker cards, task progress, and PR status",
+      "expectations": [
+        "The skill references the 'status' subcommand",
+        "The output mentions worker status/cards",
+        "The output mentions task completion counts",
+        "The output mentions the current round number"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Set up a ralph loop using OpenCode agent API instead of Codex",
+      "expected_output": "Orchestrator initializes with OpenCode as the agent backend",
+      "expectations": [
+        "The skill mentions --agent opencode flag",
+        "The output references opencode run command or OpenCode API",
+        "Worker IDs use oc- prefix instead of codex-",
+        "The output mentions opencode_model configuration"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "List all runs for my auth-overhaul initiative",
+      "expected_output": "Orchestrator lists runs under runs/auth-overhaul/ with status for each",
+      "expectations": [
+        "The skill references the 'runs' subcommand",
+        "The output mentions --initiative flag for filtering",
+        "The output shows run IDs with their status"
+      ]
+    }
+  ]
+}
