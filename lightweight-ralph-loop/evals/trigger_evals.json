@@ -1,0 +1,20 @@
+[
+  {"query": "Run a ralph loop against my repo", "should_trigger": true},
+  {"query": "Set up a ralph loop for this project", "should_trigger": true},
+  {"query": "Run ralph against this repo with 3 workers", "should_trigger": true},
+  {"query": "I have a PRD.md, run an autonomous multi-worker build", "should_trigger": true},
+  {"query": "Start a lightweight ralph loop with Codex Docker workers", "should_trigger": true},
+  {"query": "Run the ralph loop orchestrator to implement my PRD", "should_trigger": true},
+  {"query": "Use ralph to break down my PRD into tasks and run parallel workers", "should_trigger": true},
+  {"query": "I need to run an autonomous coding loop from PRD to PR", "should_trigger": true},
+  {"query": "Set up ralph loop with OpenCode agent API", "should_trigger": true},
+  {"query": "Run a ralph wiggum loop against my FastAPI app", "should_trigger": true},
+  {"query": "Help me write a Python function to sort a list", "should_trigger": false},
+  {"query": "What does git rebase do?", "should_trigger": false},
+  {"query": "Review my pull request", "should_trigger": false},
+  {"query": "Create a new React component", "should_trigger": false},
+  {"query": "Set up a CI/CD pipeline with GitHub Actions", "should_trigger": false},
+  {"query": "Help me debug this TypeScript error", "should_trigger": false},
+  {"query": "Write unit tests for my API endpoints", "should_trigger": false},
+  {"query": "How do I deploy to Vercel?", "should_trigger": false}
+]

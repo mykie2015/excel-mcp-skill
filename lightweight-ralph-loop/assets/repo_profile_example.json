@@ -1,0 +1,13 @@
+{
+  "agent": "codex",
+  "language": "python",
+  "test_cmd": "pytest",
+  "test_focused_cmd": "pytest {changed_files}",
+  "lint_cmd": "ruff check .",
+  "typecheck_cmd": "mypy .",
+  "build_cmd": null,
+  "docker_image": "codex-worker:latest",
+  "codex_flags": "--full-auto",
+  "opencode_model": null,
+  "opencode_api_url": null
+}
